@@ -362,6 +362,19 @@ config ARCH_MSM8994_V1_TLBI_WA
 
 endmenu
 
+config MSM8953_PRODUCT
+	bool "MSM8953 Product"
+	default n
+	help
+	  Say Y here if MSM8953
+	  If unsure, say N.
+
+config TOWA_PRODUCT
+	bool "TOWA PRODUCT"
+	default n
+	help
+	  Say Y here if TOWA
+
 menu "Bus support"
 
 config ARM_AMBA
@@ -900,6 +913,7 @@ endif
 
 config ARM64_SW_TTBR0_PAN
 	bool "Emulate Privileged Access Never using TTBR0_EL1 switching"
+	depends on BROKEN       # Temporary while switch_mm is reworked
 	help
 	  Enabling this option prevents the kernel from accessing
 	  user-space memory directly by pointing TTBR0_EL1 to a reserved
@@ -1116,7 +1130,7 @@ config ARM64_ERRATUM_843419
 	  If unsure, say Y.
 
 endmenu
-
+	  
 source "net/Kconfig"
 
 source "drivers/Kconfig"

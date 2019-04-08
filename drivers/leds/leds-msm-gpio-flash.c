@@ -129,11 +129,16 @@ static int led_gpio_flash_probe(struct platform_device *pdev)
 
 	flash_led = devm_kzalloc(&pdev->dev, sizeof(struct led_gpio_flash_data),
 				 GFP_KERNEL);
-	if (flash_led == NULL)
+	printk(KERN_DEBUG "led_gpio_flash_probe 01\n");
+	if (flash_led == NULL) {
+		dev_err(&pdev->dev, "%s:%d Unable to allocate memory\n",
+			__func__, __LINE__);
 		return -ENOMEM;
+	}
 
 	flash_led->cdev.default_trigger = LED_TRIGGER_DEFAULT;
 	rc = of_property_read_string(node, "linux,default-trigger", &temp_str);
+	printk(KERN_DEBUG "led_gpio_flash_probe 02 rc = %d,temp_str = %s\n",rc,temp_str);
 	if (!rc)
 		flash_led->cdev.default_trigger = temp_str;
 
@@ -142,6 +147,7 @@ static int led_gpio_flash_probe(struct platform_device *pdev)
 		pr_err("%s:failed to get pinctrl\n", __func__);
 		return PTR_ERR(flash_led->pinctrl);
 	}
+	printk(KERN_DEBUG "led_gpio_flash_probe 022 rc = %d,flash_led->pinctrl = %p\n",rc,flash_led->pinctrl);
 
 	flash_led->gpio_state_default = pinctrl_lookup_state(flash_led->pinctrl,
 		"flash_default");
@@ -190,6 +196,7 @@ static int led_gpio_flash_probe(struct platform_device *pdev)
 	}
 
 	rc = of_property_read_string(node, "linux,name", &flash_led->cdev.name);
+	printk(KERN_DEBUG "of_property_read_string rc = %d\n",rc);
 	if (rc) {
 		dev_err(&pdev->dev, "%s: Failed to read linux,name. rc = %d\n",
 			__func__, rc);
@@ -270,13 +277,16 @@ static int led_gpio_flash_probe(struct platform_device *pdev)
 	flash_led->cdev.brightness_get = led_gpio_brightness_get;
 
 	rc = led_classdev_register(&pdev->dev, &flash_led->cdev);
+	printk(KERN_DEBUG "to register led dev. rc = %d\n",rc);
 	if (rc) {
 		dev_err(&pdev->dev, "%s: Failed to register led dev. rc = %d\n",
 			__func__, rc);
 		goto error;
 	}
+	pr_err("%s:probe successfully!\n", __func__);
+	printk(KERN_DEBUG "leds-msm-gpio-flash probe successfully!\n");
 	return 0;
-
+	printk(KERN_DEBUG "probe successfully!\n");
 error:
 	if (IS_ERR(flash_led->pinctrl))
 		devm_pinctrl_put(flash_led->pinctrl);
@@ -308,11 +318,17 @@ static struct platform_driver led_gpio_flash_driver = {
 
 static int __init led_gpio_flash_init(void)
 {
-	return platform_driver_register(&led_gpio_flash_driver);
+	int leds_flash;
+	printk(KERN_DEBUG "led_gpio_flash_init01\n");
+	leds_flash = platform_driver_register(&led_gpio_flash_driver);
+	printk(KERN_DEBUG "led_gpio_flash_init02:%d\n",leds_flash);
+	return leds_flash;
+
 }
 
 static void __exit led_gpio_flash_exit(void)
 {
+	printk(KERN_DEBUG "led_gpio_flash_exit");
 	return platform_driver_unregister(&led_gpio_flash_driver);
 }
 
