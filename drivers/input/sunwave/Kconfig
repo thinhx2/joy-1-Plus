@@ -1,6 +1,6 @@
 config INPUT_FINGERPRINT_SUNWAVE
 	tristate "Sunwave Fingerprint"
-	default y
+	default n
 	help
 	  If you say Y to this option, support will be included for
 	  the Sunwave's fingerprint sensor. This driver supports
