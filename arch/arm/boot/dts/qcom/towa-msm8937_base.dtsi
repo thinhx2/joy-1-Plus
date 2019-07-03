@@ -144,7 +144,6 @@
 };
 
 &pm8937_vadc {
-	/delete-node/ chan@13;
 	chan@11 {
 		label = "case_therm";
 	};

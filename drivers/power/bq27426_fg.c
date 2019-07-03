@@ -1913,9 +1913,7 @@ static irqreturn_t fg_irq_thread(int irq, void *dev_id)
 	fg_read_status(bq);
 	mutex_unlock(&bq->update_lock);
 
-	fg_dump_registers(bq);
-
-	pr_info("itpor=%d, cfg_mode = %d, seal_state=%d, batt_present=%d",
+	pr_debug("itpor=%d, cfg_mode = %d, seal_state=%d, batt_present=%d",
 			bq->itpor, bq->cfg_update_mode, bq->seal_state, bq->batt_present);
 
 	if (!last_batt_present && bq->batt_present ) {/* battery inserted */
@@ -1943,7 +1941,7 @@ static irqreturn_t fg_irq_thread(int irq, void *dev_id)
 		fg_low_volt_shutdown(bq);
 
 		mutex_unlock(&bq->update_lock);
-		pr_err("FSOC:%d, DSOC:%d, RSOC:%d, Volt:%d, Current:%d, Temperature:%d, connected_rid = %d\n",
+		pr_info("FSOC:%d, DSOC:%d, RSOC:%d, Volt:%d, Current:%d, Temperature:%d, connected_rid = %d\n",
 			bq->batt_fcc, bq->batt_dc, bq->batt_soc, bq->batt_volt, -bq->batt_curr, bq->batt_temp - 2730, bq->connected_rid);
 	}
 
