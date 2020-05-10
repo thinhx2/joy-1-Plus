@@ -753,9 +753,13 @@ struct mdss_panel_info {
 
 	/* HDR properties of display panel*/
 	struct mdss_panel_hdr_properties hdr_properties;
+
 #ifdef CONFIG_TOWA_PRODUCT
 	u32 lcd_id;
 #endif
+
+	/* DSI to DPI bridge usage */
+	bool use_dsi2dpi_bridge;
 };
 
 struct mdss_panel_timing {
